@@ -2,22 +2,32 @@ import React, { FC, useState, useEffect } from "react";
 import Page from "./Page";
 import Appcontext from "../Context";
 import Adduser from "./Adduser";
+import { CSVLink } from "react-csv";
 
 export interface userDataInfo {
   name: string;
   email: string;
+  id: number;
+  role: string;
 }
 
 const Users: FC = () => {
   const [userData, setUserData] = useState<userDataInfo[]>([]);
   const [pageCount, setPageCount] = useState<number>(1);
+  const [searchValue, setSearchValue] = useState<string>("");
 
   const fetchData = async () => {
     const fetching = await fetch("https://jsonplaceholder.typicode.com/users");
     const res = await fetching.json();
     setUserData(res);
-    // setUserData([...res, { name: "shri", email: "sasasasa" }]);
-    console.log(res.length);
+  };
+
+  const deleteUser = (ids: number) => {
+    setUserData(userData.filter((data) => data.id !== ids));
+  };
+
+  const editUserData = (ids: number) => {
+    console.log("editing");
   };
 
   useEffect(() => {
@@ -28,12 +38,7 @@ const Users: FC = () => {
 
   return (
     <Appcontext.Provider
-      value={{
-        userData,
-        setUserData,
-        pageCount,
-        setPageCount,
-      }}
+      value={{ userData, setUserData, pageCount, setPageCount }}
     >
       <main className="w-[60%] h-[70vh] border-2 rounded-md">
         {/* Top content */}
@@ -45,19 +50,26 @@ const Users: FC = () => {
                 {userData.length} users
               </h2>
             </div>
-            <h1>some content here ---------</h1>
+            <h1>some content here --------- </h1>
           </div>
 
+          {/* search feature */}
+          <input
+            type="search"
+            className="border  p-2 rounded-md focus:outline-dashed "
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder="search Users...."
+          />
+
           <div className="flex justify-center items-center gap-5">
-            <button className="p-2 border-2 rounded-md">Download CSV</button>
-            <button
-              className="p-2 border-2 rounded-md"
-              // onClick={() => inputFocus.current.focus()}
-            >
-              + Add User
-            </button>
+            <CSVLink data={userData}>
+              <button className="p-2 border-2 rounded-md"> Download CSV</button>
+            </CSVLink>
+
+            <button className="p-2 border-2 rounded-md">+ Add User</button>
           </div>
         </section>
+
         {/* Middle content */}
         <section className="flex flex-col w-[100%] h-[550px] border-b-2 overflow-hidden">
           {/* topic / nav */}
@@ -72,8 +84,20 @@ const Users: FC = () => {
           {/* user contents */}
           {userData.length > 0 &&
             userData
+              .filter((user: userDataInfo) => {
+                if (searchValue === "") {
+                  return user;
+                } else if (
+                  searchValue
+                    .toLowerCase()
+                    .replaceAll(" ", "")
+                    .includes(user.name.toLowerCase().replaceAll(" ", ""))
+                ) {
+                  return user;
+                }
+              })
               .slice(pageCount * 5 - 5, pageCount * 5)
-              .map((data: any, idx: number) => {
+              .map((data: userDataInfo, idx: number) => {
                 return (
                   <div
                     className="h-[100px] border flex w-[100%] justify-between items-center p-4"
@@ -85,16 +109,19 @@ const Users: FC = () => {
                     </div>
 
                     <h1>active</h1>
-                    <h1>dev</h1>
+                    <h1>{data.role ? data.role : "developer"}</h1>
                     <h1>7.30pm</h1>
                     <div className="flex gap-4">
-                      <button>del</button>
-                      <button>edit</button>
+                      <button onClick={() => deleteUser(data.id)}>del</button>
+                      <button onClick={() => editUserData(data.id)}>
+                        edit
+                      </button>
                     </div>
                   </div>
                 );
               })}
         </section>
+
         {/* Bottom content */}
         <Page />
 

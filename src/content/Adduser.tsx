@@ -5,10 +5,14 @@ const Adduser = () => {
   const { setUserData, userData } = useContext(Appcontext);
   const [name, setName] = useState<string>("");
   const [mail, setMail] = useState<string>("");
+  const [role, setRole] = useState<string>("");
 
   const handleUser = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setUserData([...userData, { name, email: mail }]);
+    setUserData([
+      ...userData,
+      { name, email: mail, id: userData.length + 1, role },
+    ]);
     console.log(name, mail, userData.length);
     console.log("submited");
   };
@@ -26,6 +30,7 @@ const Adduser = () => {
           placeholder="Name here"
           className="border w-[300px] p-3 rounded-md"
           onChange={(e) => setName(e.target.value)}
+          required
         />
 
         <input
@@ -33,6 +38,15 @@ const Adduser = () => {
           placeholder="Email here"
           className="border w-[300px] p-3 rounded-md"
           onChange={(e) => setMail(e.target.value)}
+          required
+        />
+
+        <input
+          type="text"
+          placeholder="Role here"
+          className="border w-[300px] p-3 rounded-md"
+          onChange={(e) => setRole(e.target.value)}
+          required
         />
 
         <button className="border-2 p-2 w-[150px] rounded-md">Submit</button>
