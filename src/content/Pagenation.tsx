@@ -2,7 +2,7 @@ import React, { FC, useContext } from "react";
 import Appcontext from "../Context";
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from "react-icons/ai";
 
-const Page: FC = () => {
+const Pagenation: FC = () => {
   const { setPageCount, userData, pageCount } = useContext(Appcontext);
 
   const selectedPage = (selectedPage: number) => {
@@ -43,7 +43,7 @@ const Page: FC = () => {
             onClick={() => selectedPage(pageCount + 1)}
             style={{ opacity: pageCount < userData.length / 5 ? 1 : 0 }}
             className="flex justify-center items-center border-2 p-2 rounded-md border-gray-200 gap-3 
-            hover:text-blue-500 hover:border-blue-600"
+            hover:text-blue-500 "
           >
             Next <AiOutlineArrowRight className="text-xl " />
           </button>
@@ -53,4 +53,4 @@ const Page: FC = () => {
   );
 };
 
-export default Page;
+export default Pagenation;

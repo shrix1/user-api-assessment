@@ -1,5 +1,5 @@
 import React, { FC, useState, useEffect } from "react";
-import Page from "./Page";
+import Pagenation from "./Pagenation";
 import Appcontext from "../Context";
 import Adduser from "./Adduser";
 import { CSVLink } from "react-csv";
@@ -161,11 +161,13 @@ const Users: FC = () => {
 
                     <h1
                       className="rounded-full p-1 text-[15px] text-green-700 
-                      bg-[#b7e7c542] font-bold w-[80px] flex justify-center items-center h-[30px]"
+                      bg-[#b7e7c562] font-bold w-[80px] flex justify-center items-center h-[30px]"
                     >
-                      <BsDot className="text-2xl" /> active
+                      <BsDot className="text-2xl" /> Active
                     </h1>
-                    <h1>{data.role ? data.role : "Developer"}</h1>
+                    <h1 className="opacity-50">
+                      {data.role ? data.role : "Developer"}
+                    </h1>
                     <div className="flex flex-col">
                       <h1>June 30, 2023</h1>
                       <h1 className="opacity-50">7.30pm</h1>
@@ -173,13 +175,13 @@ const Users: FC = () => {
                     <div className="flex gap-4">
                       <button
                         onClick={() => deleteUser(data.id)}
-                        className="hover:text-red-500"
+                        className="hover:text-red-500 text-gray-500"
                       >
-                        <AiOutlineDelete className="text-2xl" />
+                        <AiOutlineDelete className="text-2xl " />
                       </button>
                       <button
                         onClick={() => editUser(data.id)}
-                        className="hover:text-blue-500"
+                        className="hover:text-blue-500  text-gray-500"
                       >
                         <FiEdit2 className="text-[22px]" />
                       </button>
@@ -190,7 +192,7 @@ const Users: FC = () => {
         </section>
 
         {/* Bottom content */}
-        <Page />
+        <Pagenation />
 
         {/* add user */}
         <Adduser />
